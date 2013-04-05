@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, User-scalable=no, maximum-scale=1">
+        <title></title>
+		<script>
+		var is_canvas_supported = function(){return true;};
+		var width = 639;
+		var height = 250;
+		var hills = [629,80,0,75];
+		var trees = [402,150,0,55];
+		var curtains = [191,161,145,10];
+		var tags = [10,70,400,0];
+		
+		var mid;
+		</script>
+		<script src="animation.combine.min.js" type="text/javascript"></script>
+		<style>
+		only screen and (min-device-width: 768px){
+			body {
+				width:768px;
+				height:100%;
+				background:pink;
+				margin:0 auto;
+				float:left;
+			}
+		}
+		</style>
+		<script>
+		var loaded =  0;
+		var imgs = [];
+		
+		function loadImage(id,src,sw,sh,w,h,n){
+			var img = createCanvas(id, id, w, h, false);
+			var i = new Image();
+			i.src = src;
+			
+			i.onload = function(){
+				img.context.drawImage(i,0,0,sw,sh,0,0,w,h);
+				
+				imgs[n] = img.canvas.toDataURL();
+				
+				loaded ++;
+				if(loaded == 6)	createMoment();
+			}
+		};
+		
+		function preScale(){
+			loadImage("rear","images/rearground.jpg",1278,500,639,250,0);
+			loadImage("mid","images/midground.png",1278,500,639,250,1);
+			loadImage("hills","images/hill.png",1258,160,629,80,2);
+			loadImage("trees","images/trees.png",804,300,402,150,3);
+			loadImage("curtains","images/curtains.png",382,321,191,161,4);
+			loadImage("tag","images/tag.png",19,140,10,70,5);
+		}
+		
+		function createMoment(){
+		
+			function getRandom(min, max) {
+				return Math.floor(Math.random() * (max - min + 1)) + min;
+			};
+
+			var director = new Director();
+			//this.director.isLoaded = this.isLoaded;
+			var scene = new Scene(director, { parentId: "moment", w: width, h: height, append: true }, true, false, 1, { x: width / 2, y: height / 2 });
+			var lyr2 = new Entity(scene,"rearbg",{x:0,y:0},{w:width,h:height},imgs[0],1,null,1,{x:0,y:0},0,0,true);
+			var lyr1 = new Entity(scene,"midbg",{x:0,y:0},{w:width,h:height},imgs[1],4,null,1,{x:0,y:0},0,0,true);
+			
+			var hill = new Entity(scene,"hill",{x:hills[2],y:hills[3]},{w:hills[0],h:hills[1]},imgs[2],2,null,1,{x:0,y:0},0,0,true);
+			var tree = new Entity(scene,"trr",{x:trees[2],y:trees[3]},{w:trees[0],h:trees[1]},imgs[3],3,null,1,{x:0,y:0},0,0,true);
+			
+			var curtain = new Entity(scene,"curtain",{x:curtains[2],y:curtains[3]},{w:curtains[0],h:curtains[1]},imgs[4],5,null,1,{x:0,y:0},0,0,true);
+			var tag = new Entity(scene,"tag",{x:tags[2],y:tags[3]},{w:tags[0],h:tags[1]},imgs[5],5,null,1,{x:0,y:0},0,0,true);
+			
+			//anims
+			hill.addAnimation({
+				type: "Pattern",
+				id: "r1",
+				x: -[hills[0]],
+				y: 0,
+				delay: 0,
+				runtime: 3000,
+				callback: function () {
+					hill.play("r1");
+				}
+			});
+			
+			tree.addAnimation({
+				type: "Pattern",
+				id: "r2",
+				x: -[trees[0]],
+				y: 0,
+				delay: 0,
+				runtime: 300,
+				callback: function () {
+					tree.play("r2");
+				}
+			});
+			
+			curtain.addAnimation({
+				type: "Translate",
+				id: "t1",
+				x: curtain.pos.x + 7,
+				delay: 0,
+				runtime: 1300,
+				callback: function () {
+					curtain.play("t2");
+				}
+			})
+			.addAnimation({
+				type: "Translate",
+				id: "t2",
+				x: curtain.pos.x,
+				delay: 0,
+				runtime: 800,
+				callback: function () {
+					curtain.play("t1");
+				}
+			})
+			.addAnimation({
+				type: "Translate",
+				id: "u1",
+				y: curtain.pos.y -3,
+				delay: 0,
+				runtime: 200,
+				callback: function () {
+					curtain.play("d1");
+				}
+			})
+			.addAnimation({
+				type: "Translate",
+				id: "d1",
+				y: curtain.pos.y +3,
+				delay: 0,
+				runtime: 100,
+				callback: function () {
+					curtain.play("u2");
+				}
+			})
+			.addAnimation({
+				type: "Translate",
+				id: "u2",
+				y: curtain.pos.y-2,
+				delay: 0,
+				runtime: 100,
+				callback: function () {
+					curtain.play("d2");
+				}
+			})
+			.addAnimation({
+				type: "Translate",
+				id: "d2",
+				y: curtain.pos.y,
+				delay: 0,
+				runtime: 100
+			});
+			
+			tag.addAnimation({
+				type: "Rotate",
+				id: "ro1",
+				rotate:10,
+				delay: 0,
+				runtime: 500,
+				callback: function () {
+					tag.play("ro2");
+				}
+			})
+			.addAnimation({
+				type: "Rotate",
+				id: "ro2",
+				rotate:-10,
+				delay: 0,
+				runtime: 1000,
+				callback: function () {
+					tag.play("ro3");
+				}
+			})
+			.addAnimation({
+				type: "Rotate",
+				id: "ro3",
+				rotate:10,
+				delay: 0,
+				runtime: 1000,
+				callback: function () {
+					tag.play("ro2");
+				}
+			});
+			
+			lyr1.addAnimation({
+				type: "Translate",
+				id: "up1",
+				y: -3,
+				delay: 0,
+				runtime: 200,
+				callback: function () {
+					lyr1.play("down1");
+				}
+			})
+			.addAnimation({
+				type: "Translate",
+				id: "down1",
+				y: 3,
+				delay: 0,
+				runtime: 100,
+				callback: function () {
+					lyr1.play("up2");
+				}
+			})
+			.addAnimation({
+				type: "Translate",
+				id: "up2",
+				y: -2,
+				delay: 0,
+				runtime: 100,
+				callback: function () {
+					lyr1.play("down2");
+				}
+			})
+			.addAnimation({
+				type: "Translate",
+				id: "down2",
+				y: 0,
+				delay: 0,
+				runtime: 100,
+				callback: function () {
+					var r = getRandom(1000,5000);
+					lyr1.play("up1",r);
+					curtain.play("u1",r);
+				}
+			});
+			
+			var ra = getRandom(1000,5000);
+			lyr1.play("up1",ra);
+			curtain.play("u1",ra);
+			
+			tree.play("r2");
+			curtain.play("t1")
+			hill.play("r1");
+			tag.play("ro1");
+		};
+		</script>
+    </head>
+    <body onload="preScale()">
+		<div id="moment"></div>
+    </body>
+</html>

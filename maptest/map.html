@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+		<script>
+		var is_canvas_supported = function(){return true;};
+		var width = 800;
+		var height = 625;
+		var icon1 = [100,100,565,325];
+		var icon2 = [64,64,650,600];
+		</script>
+		<script src="animation.combine.min.js" type="text/javascript"></script>
+		<style>
+		body {
+			background-color: #000;
+		}
+
+		#moment {
+			position: relative;
+			margin: 0 auto;
+			width: 1280px;
+			height: 1000px;
+		}
+		/*
+		only screen and (min-device-width: 768px){
+			body {
+				width:768px;
+				height:100%;
+				background:pink;
+				margin:0 auto;
+				float:left;
+			}
+		}
+		*/
+		</style>
+		<script>
+		function createMoment(){
+		
+			var director = new Director();
+			//this.director.isLoaded = this.isLoaded;
+			var scene = new Scene(director, { parentId: "moment", w: width, h: height, append: true }, true, false, 1, { x: width / 2, y: height / 2 });
+			var lyr2 = new Entity(scene,"rearbg",{x:0,y:0},{w:width,h:height},"images/map_smaller_2.jpg",1,null,1,{x:0,y:0},0,0,true);
+			var iconanim1 = new Entity(scene,"iconanim1",{x:icon1[2],y:icon1[3]},{w:icon1[0],h:icon1[1]},"images/entrance_icon.png",5,null,1,{x:0,y:0},0,0,true);
+			var iconanim2 = new Entity(scene,"iconanim2",{x:icon1[2],y:icon1[3]},{w:icon1[0],h:icon1[1]},"images/greathall_icon.png",5,null,1,{x:0,y:0},0,0,true);
+			var iconanim3 = new Entity(scene,"iconanim3",{x:icon1[2],y:icon1[3]},{w:icon1[0],h:icon1[1]},"images/potions_icon.png",5,null,1,{x:0,y:0},0,0,true);
+			var iconanim4 = new Entity(scene,"iconanim4",{x:icon1[2],y:icon1[3]},{w:icon1[0],h:icon1[1]},"images/ravenclaw_icon.png",5,null,1,{x:0,y:0},0,0,true);
+			var iconanim5 = new Entity(scene,"iconanim5",{x:icon1[2],y:icon1[3]},{w:icon1[0],h:icon1[1]},"images/diagon_icon.png",5,null,1,{x:0,y:0},0,0,true);
+			var iconanim6 = new Entity(scene,"iconanim6",{x:icon2[2],y:icon2[3]},{w:icon2[0],h:icon2[1]},"images/diagon_small_icon.png",5,null,1,{x:0,y:0},0,0,true);
+			
+			//anims
+
+			iconanim1.addAnimation({
+				type: "Bezier",
+                id: "bez2",
+                points: {
+                    start: { x: 565, y: 325 },
+                    end: { x: 465, y: 690 },
+                    control1: { x: 854, y: 720 },
+                    control2: { x: 690, y: 680 }
+                },
+                delay: 0,
+                runtime: 300,
+				callback: function () {
+					iconanim2.play("bez2");
+				}
+			});
+
+			iconanim2.addAnimation({
+				type: "Bezier",
+                id: "bez2",
+                points: {
+                    start: { x: 565, y: 325 },
+                    end: { x: 510, y: 420 },
+                    control1: { x: 854, y: 720 },
+                    control2: { x: 690, y: 680 }
+                },
+                delay: 0,
+                runtime: 300,
+				callback: function () {
+					iconanim3.play("bez2");
+				}
+			});
+
+			iconanim3.addAnimation({
+				type: "Bezier",
+                id: "bez2",
+                points: {
+                    start: { x: 565, y: 325 },
+                    end: { x: 440, y: 460 },
+                    control1: { x: 854, y: 720 },
+                    control2: { x: 690, y: 680 }
+                },
+                delay: 0,
+                runtime: 300,
+				callback: function () {
+					iconanim4.play("bez2");
+				}
+			});
+
+			iconanim4.addAnimation({
+				type: "Bezier",
+                id: "bez2",
+                points: {
+                    start: { x: 565, y: 325 },
+                    end: { x: 350, y: 465 },
+                    control1: { x: 854, y: 620 },
+                    control2: { x: 690, y: 580 }
+                },
+                delay: 0,
+                runtime: 225,
+				callback: function () {
+					//iconanim5.play("bez2");
+				}
+			});
+			
+			/*iconanim5.addAnimation({
+				type: "Bezier",
+                id: "bez2",
+                points: {
+                    start: { x: 833, y: 350 },
+                    end: { x: 850, y: 370 },
+                    control1: { x: 854, y: 520 },
+                    control2: { x: 690, y: 480 }
+                },
+                delay: 0,
+                runtime: 200
+
+			});*/
+			
+			iconanim1.play("bez2");
+		};
+		</script>
+    </head>
+    <body onload="createMoment()">
+		<div id="moment"></div>
+    </body>
+</html>
